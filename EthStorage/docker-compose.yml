@@ -1,0 +1,17 @@
+version: '3'
+services:
+  es:
+    image: ghcr.io/ethstorage/es-node:v0.1.10
+    container_name: es
+    volumes:
+      - ./es-data:/es-node/es-data
+    environment:
+      - ES_NODE_STORAGE_MINER=<miner>
+      - ES_NODE_SIGNER_PRIVATE_KEY=<private_key not include 0x>
+    ports:
+      - "9545:9545"
+      - "9222:9222"
+      - "30305:30305/udp"
+    entrypoint: /es-node/run.sh
+    tty: true
+    command: /es-node/run.sh --l1.rpc <填入zan.top上的eth sepolia rpc>  --l1.beacon <填入按官方教程申请的quicknode beacon rpc>
