@@ -14,4 +14,4 @@ services:
       - "30305:30305/udp"
     entrypoint: /es-node/run.sh
     tty: true
-    command: /es-node/run.sh --l1.rpc <填入zan.top上的eth sepolia rpc>  --l1.beacon <填入按官方教程申请的quicknode beacon rpc>
+    command: /es-node/run.sh --l1.rpc <重要！重要！，不要用zan的，记得开启存档模式，填入blockpi上的eth sepolia rpc>  --l1.beacon <填入按官方教程申请的quicknode beacon rpc>
