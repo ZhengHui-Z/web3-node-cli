@@ -1,7 +1,7 @@
 version: '3'
 services:
   es:
-    image: ghcr.io/ethstorage/es-node:v0.1.10
+    image: ghcr.io/ethstorage/es-node:v0.1.11
     container_name: es
     volumes:
       - ./es-data:/es-node/es-data
