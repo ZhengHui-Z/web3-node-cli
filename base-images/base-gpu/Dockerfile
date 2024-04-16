@@ -71,9 +71,9 @@ RUN wget \
     && $HOME/anaconda3/bin/conda clean -y --all
 
 # 安装Nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && \
-    apt-get install -y nodejs npm && \
-    npm install pm2@latest -g
+RUN sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && \
+    sudo apt-get install -y nodejs
+
 
 # 安装Go
 RUN rm -rf /usr/local/go && \
@@ -81,6 +81,6 @@ RUN rm -rf /usr/local/go && \
     echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/user/.bashrc
 
 # 安装rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+RUN sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 WORKDIR $HOME
