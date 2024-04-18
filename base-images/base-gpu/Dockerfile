@@ -83,4 +83,6 @@ RUN rm -rf /usr/local/go && \
 # 安装rust
 RUN sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
+ENV PATH=$PATH:/usr/local/go/bin:/home/user/anaconda3/bin
+
 WORKDIR $HOME
