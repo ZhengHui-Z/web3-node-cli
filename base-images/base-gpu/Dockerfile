@@ -10,29 +10,17 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ENV TZ=Asia/Shanghai
 
-# TODO(ilr) $HOME seems to point to result in "" instead of "/home/user"
-
-ENV PATH "/home/user/anaconda3/bin:$PATH"
-
 
 ARG HOSTTYPE=${HOSTTYPE:-x86_64}
 
-ARG USER_UID=1000
-ARG USER_GID=100
-
-RUN apt-get update -y \
-    && apt-get install -y sudo tzdata \
-    && useradd -ms /bin/bash -d /home/user user --uid $USER_UID --gid $USER_GID \
-    && usermod -aG sudo user \
-    && echo 'user ALL=NOPASSWD: ALL' >> /etc/sudoers
-
 
 USER $USER_UID
-ENV HOME=/home/user
+ENV HOME=/root
 
 
-RUN sudo apt-get update -y && sudo apt-get upgrade -y \
-    && sudo apt-get install -y \
+RUN apt-get update -y && apt-get upgrade -y \
+    && apt-get install -y \
+    tzdata \
     vim \
     git \
     wget \
@@ -45,9 +33,9 @@ RUN sudo apt-get update -y && sudo apt-get upgrade -y \
     pkg-config \
     libssl-dev \
     locales \
-    && sudo locale-gen en_US.UTF-8 \
-    && sudo rm -rf /var/lib/apt/lists/* \
-    && sudo apt-get clean
+    && locale-gen en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 ENV LANG=en_US.UTF-8
 
@@ -66,23 +54,25 @@ RUN wget \
     # -t           run package tests after installation (may install conda-build)
     && /bin/bash /tmp/miniconda.sh -b -u -p $HOME/anaconda3 \
     && $HOME/anaconda3/bin/conda init \
-    && echo 'export PATH=$HOME/anaconda3/bin:$PATH' >> /home/user/.bashrc \
+    && echo 'export PATH=$HOME/anaconda3/bin:$PATH' >> /root/.bashrc \
     && rm /tmp/miniconda.sh \
     && $HOME/anaconda3/bin/conda clean -y --all
 
+ENV PATH "/root/anaconda3/bin:$PATH"
+
 # 安装Nodejs
-RUN sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && \
-    sudo apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | -E bash - && \
+    apt-get install -y nodejs
 
 
 # 安装Go
 RUN rm -rf /usr/local/go && \
-    curl -L https://go.dev/dl/go1.22.0.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local && \
-    echo 'export PATH=$PATH:/usr/local/go/bin' >> /home/user/.bashrc
+    curl -L https://go.dev/dl/go1.22.0.linux-amd64.tar.gz | tar -xzf - -C /usr/local && \
+    echo 'export PATH=$PATH:/usr/local/go/bin' >> /root/.bashrc
 
 # 安装rust
-RUN sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-ENV PATH=$PATH:/usr/local/go/bin:/home/user/anaconda3/bin
+# ENV PATH=$PATH:/usr/local/go/bin:/home/user/anaconda3/bin
 
-WORKDIR $HOME
+WORKDIR /app
