@@ -8,7 +8,7 @@ FROM ${BASE_IMAGE}
 # FROM directive resets ARG
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV TZ=Asia/Shanghai
+# ENV TZ=Asia/Shanghai
 
 
 ARG HOSTTYPE=${HOSTTYPE:-x86_64}
